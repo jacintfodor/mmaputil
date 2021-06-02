@@ -11,14 +11,14 @@ std::ostream& operator<<(std::ostream& os, const std::multimap<KEY, T, Compare>&
 template <typename KEY, class T, class Compare = std::less<KEY> >
 class multimap_util {
     private:
-        std::multimap<KEY, T, Compare>* myMap_;
+        std::multimap<KEY, T, Compare>* map_;
         
         typedef typename std::multimap<KEY, T, Compare>::iterator MultiMapIterator;
         typedef typename std::multimap<KEY, T, Compare>::const_iterator CMultiMapIterator;
 
     public:
-        multimap_util(std::multimap<KEY, T, Compare> &map){
-            myMap_ = &map;
+        multimap_util(std::multimap<KEY, T, Compare> &map) : {
+            map_ = &map;
         }
         
         ~multimap_util(){
@@ -26,24 +26,24 @@ class multimap_util {
         }
 
         multimap_util<KEY, T, Compare> replace_key(const KEY& currentKey, const KEY& newKey){
-            std::pair<MultiMapIterator, MultiMapIterator> result = myMap_->equal_range(currentKey);
+            std::pair<MultiMapIterator, MultiMapIterator> result = map_->equal_range(currentKey);
             std::vector<T> Values;
 
             for(MultiMapIterator it = result.first; it != result.second; ++it)
                 Values.push_back(it->second);
             
-            myMap_->erase(result.first, result.second);
+            map_->erase(result.first, result.second);
 
             for (typename std::vector<KEY>::const_iterator cit = Values.begin(); cit != Values.end(); ++cit)
-                myMap_->insert( std::make_pair(newKey, *cit) );
+                map_->insert( std::make_pair(newKey, *cit) );
 
             return *this;
         }
 
         multimap_util<KEY, T, Compare> swap(const KEY& lhs, const KEY& rhs){ 
-            if(myMap_->find(lhs) == myMap_->end() || myMap_->find(rhs) == myMap_->end()) return *this;
+            if(map_->find(lhs) == map_->end() || map_->find(rhs) == map_->end()) return *this;
             
-            std::pair<MultiMapIterator, MultiMapIterator> result = myMap_->equal_range(lhs);
+            std::pair<MultiMapIterator, MultiMapIterator> result = map_->equal_range(lhs);
 
             std::vector<T> ValuesOfLhs;
 
@@ -51,27 +51,27 @@ class multimap_util {
                 ValuesOfLhs.push_back(cit->second);
             
             
-            myMap_->erase(result.first, result.second);
+            map_->erase(result.first, result.second);
             replace_key(rhs, lhs);
 
 
             for (typename std::vector<KEY>::const_iterator cit = ValuesOfLhs.begin(); cit != ValuesOfLhs.end(); ++cit)
-                myMap_->insert( std::make_pair(rhs, *cit) );
+                map_->insert( std::make_pair(rhs, *cit) );
 
             return *this;
         }
 
         multimap_util<KEY, T, Compare> replace_value(const T a, const T& b){
-            for(MultiMapIterator it = myMap_->begin(); it != myMap_->end(); ++it)
+            for(MultiMapIterator it = map_->begin(); it != map_->end(); ++it)
                 if(it->second == a) it->second = b;
 
             return *this;
         }
 
         multimap_util<KEY, T, Compare> erase(const T a){
-            MultiMapIterator it = myMap_->begin();
-            while(it != myMap_->end()){
-                if(it->second == a) myMap_->erase(it++);
+            MultiMapIterator it = map_->begin();
+            while(it != map_->end()){
+                if(it->second == a) map_->erase(it++);
                 else ++it;
             }
             return *this;
