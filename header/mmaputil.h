@@ -29,15 +29,6 @@ public:
 };
 
 template <typename KEY, class T, class Compare>
-std::ostream &operator<<(std::ostream &os, const std::multimap<KEY, T, Compare> &mm) {
-    for (typename std::multimap<KEY, T, Compare>::const_iterator cit = mm.begin(); cit != mm.end(); ++cit) {
-        os << "(k: " << cit->first << ", v: " << cit->second << ")  ";
-    }
-
-    return os;
-}
-
-template <typename KEY, class T, class Compare>
 auto multimap_util<KEY, T, Compare>::replace_key(const KEY &currentKey, const KEY &newKey) -> multimap_util<KEY, T, Compare> {
     std::pair<MultiMapIterator, MultiMapIterator> result = map_->equal_range(currentKey);
     std::vector<T> Values;
@@ -100,6 +91,16 @@ auto multimap_util<KEY, T, Compare>::erase(const T a) -> multimap_util<KEY, T, C
         }
     }
     return *this;
+}
+
+//print multimap as KEY Value pairs
+template <typename KEY, class T, class Compare>
+std::ostream &operator<<(std::ostream &os, const std::multimap<KEY, T, Compare> &mm) {
+    for (typename std::multimap<KEY, T, Compare>::const_iterator cit = mm.begin(); cit != mm.end(); ++cit) {
+        os << "(k: " << cit->first << ", v: " << cit->second << ")  ";
+    }
+
+    return os;
 }
 
 #endif //MMAP_UTIL_H
