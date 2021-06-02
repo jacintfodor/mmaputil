@@ -5,12 +5,8 @@
 #include <iostream>
 #include <vector>
 
-template <typename KEY, class T, class Compare>
+template <typename KEY, class T, class Compare = std::less<KEY> >
 std::ostream& operator<<(std::ostream& os, const std::multimap<KEY, T, Compare>& mm);
-
-//default error: default template arguments may not be used in function templates without ‘-std=c++11’ or ‘-std=gnu++11’
-template <typename KEY, class T>
-std::ostream& operator<<(std::ostream& os, const std::multimap<KEY, T>& mm);
 
 template <typename KEY, class T, class Compare = std::less<KEY> >
 class multimap_util {
@@ -82,17 +78,9 @@ class multimap_util {
         }
 };
 
-template <typename KEY, class T, class Compare>
+template <typename KEY, class T, class Compare = std::less<KEY>>
 std::ostream& operator<<(std::ostream& os, const std::multimap<KEY, T, Compare>& mm) {
     for(typename std::multimap<KEY, T, Compare>::const_iterator cit = mm.begin(); cit != mm.end(); ++cit)
-        os << "(k: " << cit->first << ", v: " << cit->second << ")  ";
-
-    return os;
-}
-
-template <typename KEY, class T>
-std::ostream& operator<<(std::ostream& os, const std::multimap<KEY, T>& mm) {
-    for(typename std::multimap<KEY, T>::const_iterator cit = mm.begin(); cit != mm.end(); ++cit)
         os << "(k: " << cit->first << ", v: " << cit->second << ")  ";
 
     return os;
