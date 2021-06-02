@@ -20,13 +20,13 @@ private:
 public:
     multimap_util(std::multimap<KEY, T, Compare> &map) : map_(&map) {}
 
-    multimap_util<KEY, T, Compare> replace_key(const KEY &currentKey, const KEY &newKey);
+    auto replace_key(const KEY &currentKey, const KEY &newKey) -> multimap_util<KEY, T, Compare>;
 
-    multimap_util<KEY, T, Compare> swap(const KEY &lhs, const KEY &rhs);
+    auto swap(const KEY &lhs, const KEY &rhs) -> multimap_util<KEY, T, Compare>;
 
-    multimap_util<KEY, T, Compare> replace_value(const T a, const T &b);
+    auto replace_value(const T a, const T &b) -> multimap_util<KEY, T, Compare>;
 
-    multimap_util<KEY, T, Compare> erase(const T a);
+    auto erase(const T a) -> multimap_util<KEY, T, Compare>;
 };
 
 template <typename KEY, class T, class Compare>
@@ -39,7 +39,7 @@ std::ostream &operator<<(std::ostream &os, const std::multimap<KEY, T, Compare> 
 }
 
 template <typename KEY, class T, class Compare>
-multimap_util<KEY, T, Compare> multimap_util<KEY, T, Compare>::replace_key(const KEY &currentKey, const KEY &newKey){
+auto multimap_util<KEY, T, Compare>::replace_key(const KEY &currentKey, const KEY &newKey) -> multimap_util<KEY, T, Compare> {
     std::pair<MultiMapIterator, MultiMapIterator> result = map_->equal_range(currentKey);
     std::vector<T> Values;
 
@@ -55,7 +55,7 @@ multimap_util<KEY, T, Compare> multimap_util<KEY, T, Compare>::replace_key(const
 }
 
 template <typename KEY, class T, class Compare>
-multimap_util<KEY, T, Compare> multimap_util<KEY, T, Compare>::swap(const KEY &lhs, const KEY &rhs){
+auto multimap_util<KEY, T, Compare>::swap(const KEY &lhs, const KEY &rhs) -> multimap_util<KEY, T, Compare> {
     if (map_->find(lhs) == map_->end() || map_->find(rhs) == map_->end())
         return *this;
 
@@ -76,7 +76,7 @@ multimap_util<KEY, T, Compare> multimap_util<KEY, T, Compare>::swap(const KEY &l
 }
 
 template <typename KEY, class T, class Compare>
-multimap_util<KEY, T, Compare> multimap_util<KEY, T, Compare>::replace_value(const T a, const T &b){
+auto multimap_util<KEY, T, Compare>::replace_value(const T a, const T &b) -> multimap_util<KEY, T, Compare>{
     for (MultiMapIterator it = map_->begin(); it != map_->end(); ++it)
         if (it->second == a)
             it->second = b;
@@ -85,7 +85,7 @@ multimap_util<KEY, T, Compare> multimap_util<KEY, T, Compare>::replace_value(con
 }
 
 template <typename KEY, class T, class Compare>
-multimap_util<KEY, T, Compare> multimap_util<KEY, T, Compare>::erase(const T a){
+auto multimap_util<KEY, T, Compare>::erase(const T a) -> multimap_util<KEY, T, Compare>{
     MultiMapIterator it = map_->begin();
     while (it != map_->end())
     {
