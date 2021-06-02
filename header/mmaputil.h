@@ -38,6 +38,8 @@ auto multimap_util<KEY, T, Compare>::replace_key(const KEY &currentKey, const KE
     }
 
     map_->erase(result.first, result.second);
+    //currentKey might not exist in memory anymore, do not use it ()
+    //The example is quite jarring but will make one
 
     for (typename std::vector<KEY>::const_iterator cit = Values.begin(); cit != Values.end(); ++cit) {
         map_->insert(std::make_pair(newKey, *cit));
@@ -59,6 +61,8 @@ auto multimap_util<KEY, T, Compare>::swap(const KEY &lhs, const KEY &rhs) -> mul
         ValuesOfLhs.push_back(cit->second);
     }
 
+    //make sure we do not delete lhs in case its location is inside map_ 
+    //TODO
     map_->erase(result.first, result.second);
     replace_key(rhs, lhs);
 
