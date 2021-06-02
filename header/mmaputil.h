@@ -18,10 +18,6 @@ class multimap_util {
 
     public:
         multimap_util(std::multimap<KEY, T, Compare> &map) : map_(&map) { }
-        
-        ~multimap_util(){
-            
-        }
 
         multimap_util<KEY, T, Compare> replace_key(const KEY& currentKey, const KEY& newKey){
             std::pair<MultiMapIterator, MultiMapIterator> result = map_->equal_range(currentKey);
