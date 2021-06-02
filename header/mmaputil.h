@@ -17,9 +17,7 @@ class multimap_util {
         typedef typename std::multimap<KEY, T, Compare>::const_iterator CMultiMapIterator;
 
     public:
-        multimap_util(std::multimap<KEY, T, Compare> &map) : {
-            map_ = &map;
-        }
+        multimap_util(std::multimap<KEY, T, Compare> &map) : map_(&map) { }
         
         ~multimap_util(){
             
