@@ -62,7 +62,10 @@ auto multimap_util<KEY, T, Compare>::swap(const KEY &lhs, const KEY &rhs) -> mul
     }
 
     //make sure we do not delete lhs in case its location is inside map_ 
-    //TODO
+    //the example that could break the code is quite stupid so I don't plan to handle it,
+    //w/o extending the template, handling that issue would sacrafice polimorfism
+    //maybe later
+
     map_->erase(result.first, result.second);
     replace_key(rhs, lhs);
 
@@ -75,6 +78,8 @@ auto multimap_util<KEY, T, Compare>::swap(const KEY &lhs, const KEY &rhs) -> mul
 
 template <typename KEY, class T, class Compare>
 auto multimap_util<KEY, T, Compare>::replace_value(const T &a, const T &b) -> multimap_util<KEY, T, Compare>{
+    //if a's memory address could be found in the multimap this code could be act very differently
+    //like changing a to b thus its posibble that some a remain a and the loop just replace b with b instead
     for (MultiMapIterator it = map_->begin(); it != map_->end(); ++it) {
         if (it->second == a) {
             it->second = b;
@@ -86,7 +91,7 @@ auto multimap_util<KEY, T, Compare>::replace_value(const T &a, const T &b) -> mu
 
 template <typename KEY, class T, class Compare>
 auto multimap_util<KEY, T, Compare>::erase(const T &a) -> multimap_util<KEY, T, Compare>{
-    //To do make sure if a is part of the multi map we copy its values otherwise is possible we delete a itself
+    //!!!its possible to delete the object a if its adress part of the map_
     MultiMapIterator it = map_->begin();
     while (it != map_->end()) {
         if (it->second == a) {
@@ -95,6 +100,7 @@ auto multimap_util<KEY, T, Compare>::erase(const T &a) -> multimap_util<KEY, T, 
             ++it;
         }
     }
+
     return *this;
 }
 
