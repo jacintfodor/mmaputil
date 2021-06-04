@@ -19,17 +19,17 @@ private:
 public:
     multimap_util(std::multimap<KEY, T, Compare> &map) : map_(&map) {}
 
-    auto replace_key(const KEY &currentKey, const KEY &newKey) -> multimap_util<KEY, T, Compare>;
+    constexpr auto replace_key(const KEY &currentKey, const KEY &newKey) -> multimap_util<KEY, T, Compare>;
 
-    auto swap(const KEY &lhs, const KEY &rhs) -> multimap_util<KEY, T, Compare>;
+    constexpr auto swap(const KEY &lhs, const KEY &rhs) -> multimap_util<KEY, T, Compare>;
 
-    auto replace_value(const T &a, const T &b) -> multimap_util<KEY, T, Compare>;
+    constexpr auto replace_value(const T &a, const T &b) -> multimap_util<KEY, T, Compare>;
 
-    auto erase(const T &a) -> multimap_util<KEY, T, Compare>;
+    constexpr auto erase(const T &a) -> multimap_util<KEY, T, Compare>;
 };
 
 template <typename KEY, class T, class Compare>
-auto multimap_util<KEY, T, Compare>::replace_key(const KEY &currentKey, const KEY &newKey) -> multimap_util<KEY, T, Compare> {
+constexpr auto multimap_util<KEY, T, Compare>::replace_key(const KEY &currentKey, const KEY &newKey) -> multimap_util<KEY, T, Compare> {
     std::pair<MultiMapIterator, MultiMapIterator> result = map_->equal_range(currentKey);
     std::vector<T> Values;
 
@@ -49,7 +49,7 @@ auto multimap_util<KEY, T, Compare>::replace_key(const KEY &currentKey, const KE
 }
 
 template <typename KEY, class T, class Compare>
-auto multimap_util<KEY, T, Compare>::swap(const KEY &lhs, const KEY &rhs) -> multimap_util<KEY, T, Compare> {
+constexpr auto multimap_util<KEY, T, Compare>::swap(const KEY &lhs, const KEY &rhs) -> multimap_util<KEY, T, Compare> {
     if (map_->find(lhs) == map_->end() || map_->find(rhs) == map_->end()) {
         return *this;
     }
@@ -77,7 +77,7 @@ auto multimap_util<KEY, T, Compare>::swap(const KEY &lhs, const KEY &rhs) -> mul
 }
 
 template <typename KEY, class T, class Compare>
-auto multimap_util<KEY, T, Compare>::replace_value(const T &a, const T &b) -> multimap_util<KEY, T, Compare>{
+constexpr auto multimap_util<KEY, T, Compare>::replace_value(const T &a, const T &b) -> multimap_util<KEY, T, Compare>{
     //if a's memory address could be found in the multimap this code could be act very differently
     //like changing a to b thus its posibble that some a remain a and the loop just replace b with b instead
     for (MultiMapIterator it = map_->begin(); it != map_->end(); ++it) {
@@ -90,7 +90,7 @@ auto multimap_util<KEY, T, Compare>::replace_value(const T &a, const T &b) -> mu
 }
 
 template <typename KEY, class T, class Compare>
-auto multimap_util<KEY, T, Compare>::erase(const T &a) -> multimap_util<KEY, T, Compare>{
+constexpr auto multimap_util<KEY, T, Compare>::erase(const T &a) -> multimap_util<KEY, T, Compare>{
     //!!!its possible to delete the object a if its adress part of the map_
     MultiMapIterator it = map_->begin();
     while (it != map_->end()) {
